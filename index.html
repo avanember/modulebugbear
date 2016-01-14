@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>banner</title>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                /*
+                 * meghivjuk az adatfajlt (json formatum)
+                 */
+                $.getJSON("data.php", function (data) {
+                    /*
+                     * ha van adat, nekilatunk a munkanak
+                     */
+                    if (data) {
+                        /*
+                         * az elso elemet kiveszem (+torlom a tombbol), es kiiratom, ez az a felhasznalo, akinek a statjat kiiratjuk
+                         */
+                        $("body").append("<h1>" + data[0][0] + "</h1>");
+                        data.shift();
+                        /*
+                         * felepitjuk a tablazatot
+                         */
+                        var tbl = $("<table/>").addClass("tbl");
+                        $.each(data, function (k, v) {
+                            /*
+                             * fejlec sor es a tobbi sor soronkent mas-mas szinben
+                             */
+                            var row = $("<tr/>").addClass((k == 0) ? "tbl_row_header" : (k % 2 == 0) ? "tbl_row1" : "tbl_row2");
+                            $.each(v, function (k2, v2) {
+                                /*
+                                 * oszlopok (azert van each-ben, mert igy barmennyi oszlop lehet automatikusan)
+                                 */
+                                row.append($("<td/>").html((v2.indexOf("Ft") != -1) ? "<div align='right'>" + v2 + "</div>" : v2));
+                            });
+                            tbl.append(row);
+                        });
+                        /*
+                         * a tablat a dom-hoz adjuk
+                         */
+                        $("body").append(tbl);
+                    }
+                });
+            });
+        </script>
+        <style type="text/css">
+            .tbl{
+                border: dashed 1px #aaaaaa;
+                border-spacing: 2px;
+            }
+            .tbl td{
+                padding: 8px;
+            }
+            .tbl_row_header{
+                font-weight: bold;
+                background-color: #999999;
+                color: #ffffff;
+            }
+            .tbl_row1{
+                background-color: #efefef;
+            }
+            .tbl_row2{
+                background-color: #f2f2f2;
+            }
+        </style>
+    </head>
+    <body>
+    </body>
+</html>
